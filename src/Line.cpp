@@ -38,11 +38,11 @@ Line Line::CreatePerpendicularAt(ofPoint P, ofPoint P1)
 
 ofPoint Line::Intersection(Line l)
 {
-    if(isnan(m))
+    if(isnan(m) || m == 0)
     {
         return Line::VerticalIntersection((*this), l);
     }
-    else if(isnan(l.m))
+    else if(isnan(l.m) || l.m == 0)
     {
         return Line::VerticalIntersection(l, (*this));
     }
