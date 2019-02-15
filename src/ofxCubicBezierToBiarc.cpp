@@ -80,6 +80,18 @@ vector<tuple<ofPath, ofPath>> ofxCubicBezierToBiarc::ApproxCubicBezier(ofPath pa
         // V: Intersection point of tangent lines
         Line T1 = Line(bezier.P1, bezier.C1);
         Line T2 = Line(bezier.P2, bezier.C2);
+        
+        // I think this is a hack for an underlying problem.
+        // If the lines are parallel on the x axis, we cannot get the incenter, because we cannot create
+        // a triangle. So in order to avoid this, we rotate the tangent just a little bit.
+        if (isnan(T1.m)) {
+            ofPoint skewedPoint1 = ofPoint(bezier.C1.x - 0.001, bezier.C1.y);
+            T1 = Line(bezier.P1, skewedPoint1);
+        }
+        if (isnan(T2.m)) {
+            ofPoint skewedPoint2 = ofPoint(bezier.C2.x - 0.001, bezier.C2.y);
+            T2 = Line(bezier.P2, skewedPoint2);
+        }
         ofPoint V = T1.Intersection(T2);
         
         // G: incenter point of the triangle (P1, V, P2)
